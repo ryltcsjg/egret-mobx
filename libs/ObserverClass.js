@@ -6,11 +6,11 @@ const mobxIsUnmounted = newSymbol("isUnmounted");
 const skipRenderKey = newSymbol("skipRender");
 const isForcingUpdateKey = newSymbol("isForcingUpdate");
 
-const symbolRender = newSymbol("render");
+const symbolReact = newSymbol("render");
 
-export function render(context, prop) {
-  context[symbolRender] = context[symbolRender] || [];
-  context[symbolRender].push(prop);
+export function react(context, prop) {
+  context[symbolReact] = context[symbolReact] || [];
+  context[symbolReact].push(prop);
 }
 
 export function Observer(arg1) {
@@ -23,7 +23,7 @@ export function Observer(arg1) {
 
 export function makeClassComponentObserver(componentClass) {
   const target = componentClass.prototype;
-  let obKeys = target[symbolRender] || [];
+  let obKeys = target[symbolReact] || [];
   obKeys.forEach(key => {
     const baseRender = target[key];
     target[key] = function() {

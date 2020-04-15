@@ -115,5 +115,5 @@ declare module mm {
     };
 
     export const Observer: any;
-    export const render: any;
+    export const react: any;
 }

@@ -1,9 +1,9 @@
 import * as mobx from "mobx";
-import { Observer,render } from "./ObserverClass";
+import { Observer,react } from "./ObserverClass";
 
 
 export const mm = {
   mobx,
   Observer,
-  render
+  react
 };

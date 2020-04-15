@@ -53,7 +53,7 @@ class Main extends eui.UILayer {
 		}, 6000);
 	}
 
-	@mm.render
+	@mm.react
 	render() {
 		console.log('render');
 		let len = store.a.arr.length;
@@ -82,7 +82,7 @@ class Comp extends eui.Component {
 		this.label.textColor = 0xff0000;
 	}
 
-	@mm.render
+	@mm.react
 	renderText() {
 		console.log('render label', this.idx);
 		this.label.text = this.idx + store.a.arr[this.idx].text;
