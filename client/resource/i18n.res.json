@@ -1,0 +1,33 @@
+{
+	"groups": [
+		{
+			"keys": "zh_json",
+			"name": "i18n_zh"
+		},
+		{
+			"keys": "en_json",
+			"name": "i18n_en"
+		},
+		{
+			"keys": "class2filePath_json",
+			"name": "i18n_class2filePath"
+		}
+	],
+	"resources": [
+		{
+			"url": "i18n/zh.json",
+			"type": "json",
+			"name": "zh_json"
+		},
+		{
+			"url": "i18n/class2filePath.json",
+			"type": "json",
+			"name": "class2filePath_json"
+		},
+		{
+			"url": "i18n/en.json",
+			"type": "json",
+			"name": "en_json"
+		}
+	]
+}

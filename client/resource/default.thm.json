@@ -1,0 +1,8 @@
+{
+	"skins": {},
+	"autoGenerateExmlsList": true,
+	"exmls": [
+		"resource/skins/i18n.exml"
+	],
+	"path": "resource/default.thm.json"
+}

@@ -2,5 +2,18 @@
 	"search.exclude": {
 		"**/bin-debug": true,
 		"**/bin-release": true
-	}
+	},
+	"EgretI18n.skinPath": "resource/skins",
+	"EgretI18n.exportTags": [
+		["e:Label", "text"],
+		["e:Label", "text.up"],
+		["e:Label", "text.down"],
+		["e:Label", "text.disabled"],
+		["e:Label", "text.unOpen"],
+		["e:BitmapLabel", "text"],
+		["e:Button", "label"],
+		["e:EditableText", "prompt"],
+		["e:EditableText", "text"],
+		["e:TextInput", "prompt"]
+	]
 }

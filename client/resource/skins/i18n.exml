@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<e:Skin class="i18n" width="400" height="300" xmlns:e="http://ns.egret.com/eui" xmlns:w="http://ns.egret.com/wing">
+  <w:Config id="171a66ba9af"/>
+	<e:Label x="124" y="97" text="{$i18n.Label_0}"/>
+	<e:Label x="124" y="170" text="中文2"/>
+	<e:Label id="changelan" text="切换语言" x="132" y="246"/>
+</e:Skin>

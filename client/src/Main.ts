@@ -1,3 +1,14 @@
+/*
+	插件安装完成后如下：
+	1、插件-egreti18n-egreti18n exportchinese
+	2、插件-egreti18n-egreti18n save------输入zh
+
+	导出exml中的中文值resource/i18n/zh.json
+
+	复制zh.json到en.json中，更改翻译
+*/
+
+
 @mm.Observer
 class Main extends eui.UILayer {
 	protected createChildren(): void {
@@ -21,78 +32,36 @@ class Main extends eui.UILayer {
 		this.width = stageW;
 		this.height = stageH;
 
-		this.start();
+		le.i18n.init();
+
+		this.loadResouce().then(() => {
+			this.start();
+		});
 	}
 
-	componetArr = [];
-	idx = 3;
+	async loadResouce() {
+		await RES.loadConfig('default.res.json', 'resource/');
+		await RES.loadConfig('i18n.res.json', 'resource/');
 
+		await this.loadTheme();
+		await le.i18n.setLanguage('en');
+	}
+	private loadTheme() {
+		return new Promise((resolve, reject) => {
+			let theme = new eui.Theme('resource/default.thm.json', this.stage);
+			theme.once(
+				eui.UIEvent.COMPLETE,
+				() => {
+					resolve();
+				},
+				this
+			);
+		});
+	}
 	start() {
-		setTimeout(() => store.a.arr.push({ text: '___' + store.a.arr.length }), 1000);
-		setTimeout(() => store.a.arr.push({ text: '___' + store.a.arr.length }), 2000);
-		setTimeout(() => {
-			store.a.arr.push({ text: '___' + store.a.arr.length });
-			setInterval(() => {
-				store.a.arr[this.idx % 3].text = '___' + this.idx;
-				this.idx++;
-			}, 1000);
-		}, 3000);
-
-		mm.mobx.reaction(() => store.a.arr.length, (l) => console.log('length', l));
-
-		setTimeout(() => {
-			this.removeChild(this.componetArr[0]);
-			this.removeChild(this.componetArr[1]);
-			this.removeChild(this.componetArr[2]);
-
-			setTimeout(() => {
-				this.addChild(this.componetArr[0]);
-				this.addChild(this.componetArr[1]);
-				this.addChild(this.componetArr[2]);
-			}, 2000);
-		}, 6000);
+		this.addChild(new le.I18nView());
+		this.addChild(new le.MobxView());
 	}
 
-	@mm.react
-	render() {
-		console.log('render');
-		let len = store.a.arr.length;
-		for (let i = 0; i < len; i++) {
-			if (!this.componetArr[i]) {
-				let component = new Comp(i);
-				this.addChild(component);
-				this.componetArr[i] = component;
-			}
-		}
-	}
-}
 
-@mm.Observer
-class Comp extends eui.Component {
-	idx = 0;
-	label = null;
-	constructor(idx) {
-		super();
-		this.idx = idx;
-	}
-	childrenCreated() {
-		console.log('childrenCreated');
-		this.label = new eui.Label();
-		this.addChild(this.label);
-		this.label.textColor = 0xff0000;
-	}
-
-	@mm.react
-	renderText() {
-		console.log('render label', this.idx);
-		this.label.text = this.idx + store.a.arr[this.idx].text;
-		this.y = 40 * this.idx;
-	}
-
-	componentDidMount() {
-		console.log('mount', this.idx);
-	}
-	componentDidUnMount() {
-		console.log('unmount', this.idx);
-	}
 }

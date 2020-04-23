@@ -1,6 +1,7 @@
 namespace store {
+	const observable = mm.mobx.observable;
 	class A {
-		@mm.mobx.observable arr = [];
+		@observable arr = [];
 	}
 
 	export const a = new A();

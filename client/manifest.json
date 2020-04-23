@@ -9,7 +9,10 @@
 		"libs/modules/mm/mm.js"
 	],
 	"game": [
+		"bin-debug/i18n.js",
+		"bin-debug/i18nview.js",
 		"bin-debug/Main.js",
+		"bin-debug/mobxview.js",
 		"bin-debug/store.js"
 	]
 }
