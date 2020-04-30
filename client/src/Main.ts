@@ -8,8 +8,6 @@
 	复制zh.json到en.json中，更改翻译
 */
 
-
-@mm.Observer
 class Main extends eui.UILayer {
 	protected createChildren(): void {
 		super.createChildren();
@@ -62,6 +60,4 @@ class Main extends eui.UILayer {
 		this.addChild(new le.I18nView());
 		this.addChild(new le.MobxView());
 	}
-
-
 }

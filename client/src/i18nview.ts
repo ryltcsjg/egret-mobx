@@ -10,7 +10,6 @@ namespace le {
 			this.changelan.addEventListener(
 				egret.TouchEvent.TOUCH_END,
 				() => {
-					console.log('TouchEvent');
 					le.i18n.setLanguage(le.i18n.getLanguage() == 'zh' ? 'en' : 'zh');
 				},
 				null

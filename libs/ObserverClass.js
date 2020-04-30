@@ -1,4 +1,9 @@
-import { _allowStateChanges, Reaction, $mobx } from "mobx";
+import {
+  _allowStateChanges,
+  Reaction,
+  $mobx,
+  reaction as mobxReaction
+} from "mobx";
 import { newSymbol, setHiddenProp, patch } from "./utils";
 
 const mobxAdminProperty = $mobx || "$mobx";
@@ -6,33 +11,41 @@ const mobxIsUnmounted = newSymbol("isUnmounted");
 const skipRenderKey = newSymbol("skipRender");
 const isForcingUpdateKey = newSymbol("isForcingUpdate");
 
-const symbolReact = newSymbol("render");
+const symbolReact = newSymbol("react");
+const symbolReaction = newSymbol("reaction");
+const symbolDispose = newSymbol("dispose");
 
 export function react(context, prop) {
   context[symbolReact] = context[symbolReact] || [];
   context[symbolReact].push(prop);
 }
 
+export function reaction(reactionFun, option) {
+  return function(context, prop) {
+    context[symbolReaction] = context[symbolReaction] || [];
+    context[symbolReaction].push({ prop, fun: reactionFun, option });
+  };
+}
+
 export function Observer(arg1) {
-  // if (Array.isArray(arg1)) {
-  //   return componentClass => makeClassComponentObserver(componentClass, arg1);
-  // } else {
   return makeClassComponentObserver(arg1);
-  // }
 }
 
 export function makeClassComponentObserver(componentClass) {
   const target = componentClass.prototype;
-  let obKeys = target[symbolReact] || [];
-  obKeys.forEach(key => {
+  let reactKeys = target[symbolReact] || [];
+  let reactionKeys = target[symbolReaction] || [];
+  reactKeys.forEach(key => {
     const baseRender = target[key];
     target[key] = function() {
       return makeComponentReactive.call(this, baseRender, key);
     };
   });
 
+  //被添加到舞台上时调用
   patch(target, "$onAddToStage", function() {
     if (this[mobxIsUnmounted]) {
+      //移除后重新添加到舞台
       this[mobxAdminProperty] &&
         this[mobxAdminProperty].forEach(reaction => {
           reaction.isDisposed = false;
@@ -40,6 +53,7 @@ export function makeClassComponentObserver(componentClass) {
     }
     this[mobxIsUnmounted] = false;
     this.componentDidMount && this.componentDidMount();
+    //从舞台上移除时调用
     let listener = event => {
       if (event.target != this) {
         return;
@@ -50,12 +64,26 @@ export function makeClassComponentObserver(componentClass) {
         this[mobxAdminProperty].forEach(
           reaction => reaction && reaction.dispose()
         );
+      this[symbolDispose] && this[symbolDispose].forEach(dispose => dispose());
+      this[symbolDispose] = [];
+
       this[mobxIsUnmounted] = true;
       this.componentDidUnMount && this.componentDidUnMount();
     };
     this.addEventListener(egret.Event.REMOVED, listener);
     this.addEventListener(egret.Event.REMOVED_FROM_STAGE, listener);
-    obKeys.forEach(key => this[key]());
+    reactKeys.forEach(key => this[key]());
+    this[symbolDispose] = [];
+    reactionKeys.forEach(({ prop, fun, option }) => {
+      let dispose = mobxReaction(
+        fun,
+        data => {
+          this[prop](data);
+        },
+        option
+      );
+      this[symbolDispose].push(dispose);
+    });
   });
 
   // patch(target, "onDestroy", function() {
