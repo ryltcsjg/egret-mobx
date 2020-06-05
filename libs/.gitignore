@@ -1,4 +1,4 @@
-/bin/mm/mm.js*
+#/bin/mm/mm.js*
 /node_modules
 /package-lock.json
 /.vscode
