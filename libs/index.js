@@ -1,9 +1,11 @@
 import * as mobx from "mobx";
 import { Observer, react, reaction } from "./ObserverClass";
 
-export const mm = {
+const mm = {
   mobx,
   Observer,
   react,
   reaction
 };
+ let e = window || global
+e.mm = mm;
