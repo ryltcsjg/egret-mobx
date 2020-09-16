@@ -1,19 +1,14 @@
-import {
-  _allowStateChanges,
-  Reaction,
-  $mobx,
-  reaction as mobxReaction
-} from "mobx";
-import { newSymbol, setHiddenProp, patch } from "./utils";
+import { _allowStateChanges, Reaction, $mobx, reaction as mobxReaction } from 'mobx';
+import { newSymbol, setHiddenProp, patch } from './utils';
 
-const mobxAdminProperty = $mobx || "$mobx";
-const mobxIsUnmounted = newSymbol("isUnmounted");
-const skipRenderKey = newSymbol("skipRender");
-const isForcingUpdateKey = newSymbol("isForcingUpdate");
+const mobxAdminProperty = $mobx || '$mobx';
+const mobxIsUnmounted = newSymbol('isUnmounted');
+const skipRenderKey = newSymbol('skipRender');
+const isForcingUpdateKey = newSymbol('isForcingUpdate');
 
-const symbolReact = newSymbol("react");
-const symbolReaction = newSymbol("reaction");
-const symbolDispose = newSymbol("dispose");
+const symbolReact = newSymbol('react');
+const symbolReaction = newSymbol('reaction');
+const symbolDispose = newSymbol('dispose');
 
 export function react(context, prop) {
   context[symbolReact] = context[symbolReact] || [];
@@ -43,7 +38,7 @@ export function makeClassComponentObserver(componentClass) {
   });
 
   //被添加到舞台上时调用
-  patch(target, "$onAddToStage", function() {
+  patch(target, '$onAddToStage', function() {
     if (this[mobxIsUnmounted]) {
       //移除后重新添加到舞台
       this[mobxAdminProperty] &&
@@ -61,9 +56,7 @@ export function makeClassComponentObserver(componentClass) {
       this.removeEventListener(egret.Event.REMOVED, listener);
       this.removeEventListener(egret.Event.REMOVED_FROM_STAGE, listener);
       this[mobxAdminProperty] &&
-        this[mobxAdminProperty].forEach(
-          reaction => reaction && reaction.dispose()
-        );
+        this[mobxAdminProperty].forEach(reaction => reaction && reaction.dispose());
       this[symbolDispose] && this[symbolDispose].forEach(dispose => dispose());
       this[symbolDispose] = [];
 
@@ -112,9 +105,8 @@ function makeComponentReactive(render, obKey) {
   const initialName =
     this.displayName ||
     this.name ||
-    (this.constructor &&
-      (this.constructor.displayName || this.constructor.name)) ||
-    "<component>";
+    (this.constructor && (this.constructor.displayName || this.constructor.name)) ||
+    '<component>';
   const baseRender = render.bind(this);
 
   let isRenderingPending = false;

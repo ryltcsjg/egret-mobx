@@ -37,10 +37,10 @@ const config: ResourceManagerConfig = {
                     new WxgamePlugin(useWxPlugin),
                     new UglifyPlugin([
                         // 使用 EUI 项目，要压缩皮肤文件，可以开启这个压缩配置
-                        // {
-                        //     sources: ["resource/default.thm.js"],
-                        //     target: "default.thm.min.js"
-                        // },
+                        {
+                            sources: ["resource/default.thm.js"],
+                            target: "default.thm.min.js"
+                        },
                         {
                             sources: ["main.js"],
                             target: "main.min.js"

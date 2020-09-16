@@ -9,55 +9,60 @@
 */
 
 class Main extends eui.UILayer {
-	protected createChildren(): void {
-		super.createChildren();
+  protected createChildren(): void {
+    super.createChildren();
 
-		egret.lifecycle.addLifecycleListener((context) => {
-			// custom lifecycle plugin
-		});
+    egret.lifecycle.addLifecycleListener(context => {
+      // custom lifecycle plugin
+    });
 
-		egret.lifecycle.onPause = () => {
-			egret.ticker.pause();
-		};
+    egret.lifecycle.onPause = () => {
+      egret.ticker.pause();
+    };
 
-		egret.lifecycle.onResume = () => {
-			egret.ticker.resume();
-		};
+    egret.lifecycle.onResume = () => {
+      egret.ticker.resume();
+    };
 
-		let stageW = this.stage.stageWidth;
-		let stageH = this.stage.stageHeight;
+    let stageW = this.stage.stageWidth;
+    let stageH = this.stage.stageHeight;
 
-		this.width = stageW;
-		this.height = stageH;
+    this.width = stageW;
+    this.height = stageH;
 
-		le.i18n.init();
+    le.i18n.init();
 
-		this.loadResouce().then(() => {
-			this.start();
-		});
-	}
+    this.loadResouce().then(() => {
+      this.start();
+    });
+  }
 
-	async loadResouce() {
-		await RES.loadConfig('default.res.json', 'resource/');
-		await RES.loadConfig('i18n.res.json', 'resource/');
-
-		await this.loadTheme();
-		await le.i18n.setLanguage('en');
-	}
-	private loadTheme() {
-		return new Promise((resolve, reject) => {
-			let theme = new eui.Theme('resource/default.thm.json', this.stage);
-			theme.once(
-				eui.UIEvent.COMPLETE,
-				() => {
-					resolve();
-				},
-				this
-			);
-		});
-	}
-	start() {
-		this.addChild(new le.I18nView());
-		this.addChild(new le.MobxView());
-	}
+  loadResouce() {
+    return Promise.all([
+      RES.loadConfig('default.res.json', 'resource/'),
+      RES.loadConfig('i18n.res.json', 'resource/'),
+      this.loadTheme(),
+    ]).then(() => le.i18n.setLanguage('en'));
+  }
+  private loadTheme() {
+    return new Promise((resolve, reject) => {
+      let isWxGame = !!window['wx'];
+      if (isWxGame) {
+        resolve();
+        return;
+      }
+      let theme = new eui.Theme('resource/default.thm.json', this.stage);
+      theme.once(
+        eui.UIEvent.COMPLETE,
+        () => {
+          resolve();
+        },
+        this
+      );
+    });
+  }
+  start() {
+    this.addChild(new le.I18nView());
+    this.addChild(new le.MobxView());
+  }
 }
